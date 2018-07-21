@@ -17,14 +17,14 @@ class User < ApplicationRecord
   has_many :followers, through: :reverses_of_relationship, source: :user
   
   has_many :like_relationships
-  has_many :likes, through: :like_relatinships, source: :microposts
+  has_many :likes, through: :like_relationships, source: :micropost
   
   def feed_microposts
     Micropost.where(user_id: self.following_ids + [self.id])
   end
   
   def feed_likes
-    Micropost.where(self.like_ids)
+    Micropost.where(id: self.like_ids)
   end
   
   def follow(other_user)
@@ -44,17 +44,16 @@ class User < ApplicationRecord
   end
   
   def like(micropost)
-    self.like_relationships.find_or_create_by(id: micropost.id)
+    self.like_relationships.find_or_create_by(micropost_id: micropost.id)
   end
   
   def unlike(micropost)
-    @like = self.like_relationships.find_by(id: micropost.id)
-    @like.destroy if like
+    @like = self.like_relationships.find_by(micropost_id: micropost.id)
+    @like.destroy if @like
   end
   
   def like?(micropost)
-    @like = self.like_relationships.find_by(id: micropost.id)
-    self.likes.include?(micropost.id)
+    self.likes.include?(micropost)
   end
   
   

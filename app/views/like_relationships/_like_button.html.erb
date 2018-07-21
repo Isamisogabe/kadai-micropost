@@ -1,12 +1,12 @@
-<% if current_user.like?(micropost.id) %>
-  <%= form_for(current_user.like_relationships.find_by(id: micropost.id), html: { method: :delete}) do |f| %>
-    <%= hidden_field_tag :id, micropost.id %>
-    <%= f.submit 'cancel' , class: 'btn btn-warning btn-block ' %>
+<% if current_user.like?(micropost) %>
+  <%= form_for(current_user.like_relationships.find_by(micropost_id: micropost.id), html: { method: :delete}) do |f| %>
+    <%= hidden_field_tag :micropost_id, micropost.id %>
+    <%= f.submit 'Cancel' , class: 'btn btn-warning btn-block btn-xs ' %>
   <% end %>
 <% else %>
   <%= form_for(current_user.like_relationships.build) do |f| %>
-    <%= hidden_field_tag :id, micropost.id %>
-    <%=f.submit 'like!' , class: 'btn btn-primary btn-block' %>
+    <%= hidden_field_tag :micropost_id, micropost.id %>
+    <%=f.submit 'like!' , class: 'btn btn-primary btn-block btn-xs' %>
   <% end %>
 <% end %>
 

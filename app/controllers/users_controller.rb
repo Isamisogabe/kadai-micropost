@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :require_user_logged_in, only: [:index, :show, :followings, :followers]
+  before_action :exist_user?, only: [:show]
   def index
     @users = User.all.page(params[:page])
   end
@@ -42,5 +43,12 @@ class UsersController < ApplicationController
   
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
+  end
+  
+  def exist_user?
+    @user = User.find_by(id: params[:id])
+    unless @user
+      redirect_to root_url
+    end
   end
 end
